@@ -2,11 +2,12 @@ server:
   port: 8443
   ssl:
     key-store: "classpath:server.p12"
-    key-store-password: password
+    key-store-password: "password"
     key-store-type: PKCS12
     client-auth: want
-#    trust-store: "classpath:server.jks"
-#    trust-store-password: changeme
+    trust-store-type: jks
+    trust-store: "classpath:rootCA.jks"
+    trust-store-password: "password"
 
 
 #security:
