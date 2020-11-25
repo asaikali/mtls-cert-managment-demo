@@ -1,5 +1,8 @@
 package com.example.mtls.client;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Column;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
@@ -19,19 +22,42 @@ import java.security.cert.X509Certificate;
 @RestController
 public class RootController {
 
-    private final RestTemplate restTemplate;
+    private final CertService certService;
+    private final CertRepository certRepository;
 
-    public RootController(MtlsConfiguration configuration) throws Exception {
+    public RootController(CertService certService, CertRepository certRepository) throws Exception {
+        this.certService = certService;
+        this.certRepository = certRepository;
+    }
 
-//        HttpClient httpClient = MtlsHttpClientBuilder.build(configuration);
-//        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-        this.restTemplate =  new RestTemplate();
+    @GetMapping("/certs")
+    public List<CertEntity> certs(){
+        List<CertEntity> certs = new ArrayList<>();
+        this.certRepository.findAll().forEach(certs::add);
+        return certs;
     }
 
     @GetMapping("/")
     public String homePage()
     {
-        String result = this.restTemplate.getForObject("http://localhost:8443/greet/adib", String.class);
-        return result;
+        return this.certService.getStoreRestTemplate("store-100","password")
+            .map(restTemplate -> restTemplate.getForObject("https://localhost:8443/", String.class ))
+            .orElse("No rest template found for an mTLS call");
+    }
+
+    @GetMapping("/100")
+    public String store100Call()
+    {
+        return this.certService.getStoreRestTemplate("store-100","password")
+            .map(restTemplate -> restTemplate.getForObject("https://localhost:8443/", String.class ))
+            .orElse("No rest template found for an mTLS call");
+    }
+
+    @GetMapping("/200")
+    public String store200Call()
+    {
+        return this.certService.getStoreRestTemplate("store-200","password")
+            .map(restTemplate -> restTemplate.getForObject("https://localhost:8443/", String.class ))
+            .orElse("No rest template found for an mTLS call");
     }
 }
