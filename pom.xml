@@ -23,6 +23,7 @@
 		<module>lib</module>
 		<module>app</module>
 		<module>greeting-server</module>
+		<module>greeting-client</module>
 	</modules>
 
 	<dependencies>
