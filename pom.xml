@@ -11,17 +11,18 @@
 
 	<packaging>pom</packaging>
 	<groupId>com.example</groupId>
-	<artifactId>template-boot-maven-multi-module</artifactId>
+	<artifactId>mtls-cert-managment-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>8</java.version>
 	</properties>
 
 	<modules>
 		<module>lib</module>
 		<module>app</module>
+		<module>greeting-server</module>
 	</modules>
 
 	<dependencies>
